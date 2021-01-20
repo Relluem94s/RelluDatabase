@@ -6,7 +6,7 @@
             "email": "github@relluem94.de"
         }
     ],
-    "minimum-stability": "master",
+    "minimum-stability": "dev",
     "require": {
       "php": ">=7.0.0"
     },
