@@ -76,7 +76,7 @@ class Database {
             $select = array();
             
             while( $row = mysqli_fetch_assoc($result)){
-                $select[] = $row;
+                $select[] = $this->decodeRow($row);
             }
             
             $result->close();
@@ -84,6 +84,15 @@ class Database {
             return $select;
         }
     }
+    
+    
+    private function decodeRow(array $row) {
+    $row_data = array();
+    foreach ($row as $k => $v) {
+        $row_data += array($k => html_entity_decode(($v), ENT_QUOTES | ENT_HTML5));
+    }
+    return $row_data;
+}
     
     /**
      * 
