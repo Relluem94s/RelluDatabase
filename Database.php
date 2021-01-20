@@ -116,6 +116,11 @@ class Database {
         return file_get_contents($file);
     }
 
+    /**
+     * 
+     * @param array $fields to get the type from
+     * @return string with types
+     */
     private function getTypes(array $fields) : string{
         $types = "";
         
