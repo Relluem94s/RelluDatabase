@@ -1,7 +1,5 @@
 <?php
 
-namespace RelluDatabase\Database;
-
 /**
  * Description of Database
  *
