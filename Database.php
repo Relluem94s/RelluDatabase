@@ -119,6 +119,17 @@ class Database {
     /**
      * 
      * @param string $file loads /admin/sqls/$file
+     * @param array $params parameter for script
+     * @param string $types the type of the params e.g. i (integer) s (String)
+     * @return array Result of query
+     */
+    function insert(string $file, array $params, string $types = null) : bool {
+        return $this->execute($file, $params, $types);
+    }
+    
+    /**
+     * 
+     * @param string $file loads /admin/sqls/$file
      * @return string File Contents as a String
      */
     private function loadSQLFile($file) : string {
