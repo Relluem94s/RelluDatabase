@@ -1,4 +1,4 @@
-![RelluTodo](https://img.relluem94.de/logos/relludatabase.png)
+![RelluDatabase](https://img.relluem94.de/logos/relludatabase.png)
 
 ## Install
 1. Add this two lines to the composer.json
