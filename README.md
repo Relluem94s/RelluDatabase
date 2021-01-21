@@ -16,4 +16,4 @@
     "relluem94/relludatabase": "master"
 }
 ``` 
-2. Run ```composer update``` to get this
+2. Run ```composer update``` to download the RelluDatabase Dependency for your project. 
