@@ -27,6 +27,7 @@ class Database {
     private function connect() {
         $this->db_link = mysqli_connect($this->host, $this->username, $this->password);
         if ($this->db_link) {
+            $this->db_link->set_charset("utf8");
             mysqli_select_db($this->db_link, $this->database);
         } else {
             die("<p>Error: " . mysqli_errno($this->db_link) . " " . mysqli_error($this->db_link) . "</p>");
