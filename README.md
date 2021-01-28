@@ -6,7 +6,7 @@
 "repositories": [
   {
       "type": "vcs",
-      "url": "https://github.com/Relluem94/RelluDatabase.git"
+      "url": "https://github.com/Relluem94s/RelluDatabase.git"
   }
 ]
 ```
