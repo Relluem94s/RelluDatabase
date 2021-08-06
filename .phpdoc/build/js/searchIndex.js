@@ -8,7 +8,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Database\u003A\u003ADatabase\u0028\u0029",
             "name": "Database",
-            "summary": "",
+            "summary": "Constructor",
             "url": "classes/Database.html#method_Database"
         },                {
             "fqsen": "\\Database\u003A\u003Aconnect\u0028\u0029",
@@ -80,6 +80,11 @@ Search.appendIndex(
             "name": "database",
             "summary": "Database\u0020to\u0020connect\u0020to",
             "url": "classes/Database.html#property_database"
+        },                {
+            "fqsen": "\\Database\u003A\u003A\u0024charset",
+            "name": "charset",
+            "summary": "Stores\u0020Standardcharset",
+            "url": "classes/Database.html#property_charset"
         },                {
             "fqsen": "\\Database\u003A\u003A\u0024db_link",
             "name": "db_link",
