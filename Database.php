@@ -46,7 +46,7 @@ class Database {
     private $db_link;
     
     /**
-     *  
+     *  Constructor
      * 
      * @param String $host
      * @param String $username
