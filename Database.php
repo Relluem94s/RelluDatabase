@@ -3,7 +3,7 @@
 /**
  * Welcome to the Docs of RelluDatabase
  * 
- * <a>https://github.com/Relluem94s/RelluDatabase/</a>
+ * @link https://github.com/Relluem94s/RelluDatabase/
  *
  * @author Relluem94
  */
@@ -45,19 +45,22 @@ class Database {
         $this->password = $password;
         $this->database = $database;
 
-        $this->connect();
+        if(!$this->connect()){
+            die("<p>Error: " . mysqli_errno($this->db_link) . " " . mysqli_error($this->db_link) . "</p>");
+        }
     }
 
     /**
      * Connect to the Database
+     * @return bool success?
      */
-    private function connect() {
+    private function connect(): bool {
         $this->db_link = mysqli_connect($this->host, $this->username, $this->password);
         if ($this->db_link) {
             $this->db_link->set_charset("utf8");
-            mysqli_select_db($this->db_link, $this->database);
+            return mysqli_select_db($this->db_link, $this->database);
         } else {
-            die("<p>Error: " . mysqli_errno($this->db_link) . " " . mysqli_error($this->db_link) . "</p>");
+            return false;
         }
     }
 
@@ -204,8 +207,8 @@ class Database {
     /**
      * Closes the Database Connection
      */
-    public function close() {
-        mysqli_close($this->db_link);
+    public function close(): bool {
+        return mysqli_close($this->db_link);
     }
 
 }
