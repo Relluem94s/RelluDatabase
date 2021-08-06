@@ -32,20 +32,36 @@ class Database {
      * @var String
      */
     private $database;
+    
+    /**
+     * Stores Standardcharset
+     * @var String 
+     */
+    private $charset;
 
     /**
      * Stores the Connection
      * @var Class 
      */
     private $db_link;
-
-    public function Database($host, $username, $password, $database) {
+    
+    /**
+     *  
+     * 
+     * @param String $host
+     * @param String $username
+     * @param String $password
+     * @param String $database
+     * @param String $charset
+     */
+    public function Database($host, $username, $password, $database, $charset = "utf8") {
         $this->host = $host;
         $this->username = $username;
         $this->password = $password;
         $this->database = $database;
+        $this->charset = $charset;
 
-        if(!$this->connect()){
+        if (!$this->connect()) {
             die("<p>Error: " . mysqli_errno($this->db_link) . " " . mysqli_error($this->db_link) . "</p>");
         }
     }
@@ -57,7 +73,7 @@ class Database {
     private function connect(): bool {
         $this->db_link = mysqli_connect($this->host, $this->username, $this->password);
         if ($this->db_link) {
-            $this->db_link->set_charset("utf8");
+            $this->db_link->set_charset($this->charset);
             return mysqli_select_db($this->db_link, $this->database);
         } else {
             return false;
