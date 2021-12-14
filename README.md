@@ -1,4 +1,4 @@
-![RelluDatabase](https://img.relluem94.de/logos/relludatabase.png)
+![RelluDatabase](https://img.relluem94.de/logos/web/relludatabase.png)
 
 ## Install
 1. Add this two lines to the composer.json
@@ -15,5 +15,5 @@
 "require": {
     "relluem94/relludatabase": "master"
 }
-``` 
+```
 2. Run ```composer update``` to download the RelluDatabase Dependency for your project. 
