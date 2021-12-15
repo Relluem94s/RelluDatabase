@@ -54,7 +54,7 @@ class Database {
      * @param String $database
      * @param String $charset
      */
-    public function Database($host, $username, $password, $database, $charset = "utf8") {
+    public function __construct($host, $username, $password, $database, $charset = "utf8") {
         $this->host = $host;
         $this->username = $username;
         $this->password = $password;
