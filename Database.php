@@ -224,7 +224,12 @@ class Database {
      * Closes the Database Connection
      */
     public function close(): bool {
-        return mysqli_close($this->db_link);
+        if($this->db_link){
+            return mysqli_close($this->db_link);
+        }
+        else{
+            return false;
+        }
     }
 
 }
