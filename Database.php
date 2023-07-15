@@ -1,5 +1,7 @@
 <?php
 
+namespace Relluem94;
+
 /**
  * Welcome to the Docs of RelluDatabase
  * 
