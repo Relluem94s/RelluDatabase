@@ -13,31 +13,31 @@ class Database {
 
     /**
      * IP / URL to Database
-     * @var String
+     * @var string
      */
     private $host;
 
     /**
      * Username to auth with Database
-     * @var String
+     * @var string
      */
     private $username;
 
     /**
      * Password to auth with Database
-     * @var String
+     * @var string
      */
     private $password;
 
     /**
      * Database to connect to
-     * @var String
+     * @var string
      */
     private $database;
     
     /**
      * Stores Standardcharset
-     * @var String 
+     * @var string 
      */
     private $charset;
 
@@ -50,11 +50,11 @@ class Database {
     /**
      *  Constructor
      * 
-     * @param String $host
-     * @param String $username
-     * @param String $password
-     * @param String $database
-     * @param String $charset
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * @param string $database
+     * @param string $charset
      */
     public function __construct($host, $username, $password, $database, $charset = "utf8") {
         $this->host = $host;
@@ -101,6 +101,9 @@ class Database {
             $statment->close();
             return $success;
         }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -134,6 +137,9 @@ class Database {
 
             return $select;
         }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -158,7 +164,7 @@ class Database {
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
-    function update(string $file, array $params, string $types = null): bool {
+    public function update(string $file, array $params, string $types = null): bool {
         return $this->execute($file, $params, $types);
     }
 
@@ -170,7 +176,7 @@ class Database {
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
-    function delete(string $file, array $params, string $types = null): bool {
+    public function delete(string $file, array $params, string $types = null): bool {
         return $this->execute($file, $params, $types);
     }
 
@@ -182,8 +188,28 @@ class Database {
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
-    function insert(string $file, array $params, string $types = null): bool {
+    public function insert(string $file, array $params, string $types = null): bool {
         return $this->execute($file, $params, $types);
+    }
+    
+    /**
+     * Executes a Statement
+     * 
+     * @param string $file loads File in Path
+     * @param array $params parameter for script
+     * @param string $types the types of the params e.g. i (integer) s (String)
+     * @return bool success
+     */
+    public function execute(string $file): bool {
+        if ($this->db_link) {
+            $statment = mysqli_prepare($this->db_link, $this->loadSQLFile($file));
+            $success = $statment->execute();
+            $statment->close();
+            return $success;
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -233,5 +259,5 @@ class Database {
             return false;
         }
     }
-
 }
+
