@@ -43,7 +43,7 @@ class Database {
 
     /**
      * Stores the Connection
-     * @var Class 
+     * @var object 
      */
     private $db_link;
     
@@ -90,7 +90,7 @@ class Database {
      * @param string $types the types of the params e.g. i (integer) s (String)
      * @return bool success
      */
-    private function execute(string $file, array $params, string $types = null): bool {
+    private function execute_with_param(string $file, array $params, string $types = null): bool {
         if ($types === null) {
             $types = $this->getTypes($params);
         }
@@ -138,7 +138,7 @@ class Database {
             return $select;
         }
         else {
-            return false;
+            return ["success":false];
         }
     }
 
@@ -165,7 +165,7 @@ class Database {
      * @return array Result of query
      */
     public function update(string $file, array $params, string $types = null): bool {
-        return $this->execute($file, $params, $types);
+        return $this->execute_with_param($file, $params, $types);
     }
 
     /**
@@ -177,7 +177,7 @@ class Database {
      * @return array Result of query
      */
     public function delete(string $file, array $params, string $types = null): bool {
-        return $this->execute($file, $params, $types);
+        return $this->execute_with_param($file, $params, $types);
     }
 
     /**
@@ -189,7 +189,7 @@ class Database {
      * @return array Result of query
      */
     public function insert(string $file, array $params, string $types = null): bool {
-        return $this->execute($file, $params, $types);
+        return $this->execute_with_param($file, $params, $types);
     }
     
     /**
