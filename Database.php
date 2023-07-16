@@ -138,7 +138,7 @@ class Database {
             return $select;
         }
         else {
-            return ["success":false];
+            return ["success" => false];
         }
     }
 
