@@ -151,7 +151,12 @@ class Database {
     private function decodeRow(array $row) {
         $row_data = array();
         foreach ($row as $k => $v) {
-            $row_data += array($k => html_entity_decode(($v), ENT_QUOTES | ENT_HTML5));
+            if($v !== null){
+                $row_data += array($k => html_entity_decode(($v), ENT_QUOTES | ENT_HTML5));
+            }
+            else{
+                $row_data += array($k => ($v));
+            }
         }
         return $row_data;
     }
