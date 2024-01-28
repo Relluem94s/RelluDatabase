@@ -4,7 +4,7 @@ namespace Relluem94;
 
 /**
  * Welcome to the Docs of RelluDatabase
- * 
+ *
  * @link https://github.com/Relluem94s/RelluDatabase/
  *
  * @author Relluem94
@@ -37,19 +37,19 @@ class Database {
     
     /**
      * Stores Standardcharset
-     * @var string 
+     * @var string
      */
     private $charset;
 
     /**
      * Stores the Connection
-     * @var object 
+     * @var object
      */
-    private $db_link;
+    private $dbLink;
     
     /**
      *  Constructor
-     * 
+     *
      * @param string $host
      * @param string $username
      * @param string $password
@@ -64,7 +64,7 @@ class Database {
         $this->charset = $charset;
 
         if (!$this->connect()) {
-            die("<p>Error: " . mysqli_errno($this->db_link) . " " . mysqli_error($this->db_link) . "</p>");
+            die("<p>Error: " . mysqli_errno($this->dbLink) . " " . mysqli_error($this->dbLink) . "</p>");
         }
     }
 
@@ -73,10 +73,10 @@ class Database {
      * @return bool success?
      */
     private function connect(): bool {
-        $this->db_link = mysqli_connect($this->host, $this->username, $this->password);
-        if ($this->db_link) {
-            $this->db_link->set_charset($this->charset);
-            return mysqli_select_db($this->db_link, $this->database);
+        $this->dbLink = mysqli_connect($this->host, $this->username, $this->password);
+        if ($this->dbLink) {
+            $this->dbLink->set_charset($this->charset);
+            return mysqli_select_db($this->dbLink, $this->database);
         } else {
             return false;
         }
@@ -84,19 +84,25 @@ class Database {
 
     /**
      * Executes a Statement
-     * 
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the types of the params e.g. i (integer) s (String)
      * @return bool success
      */
-    private function execute_with_param(string $file, array $params, string $types = null): bool {
+    private function executeWithParam(string $file, array $params, string $types = null): bool {
         if ($types === null) {
             $types = $this->getTypes($params);
         }
-        if ($this->db_link) {
-            $statment = mysqli_prepare($this->db_link, $this->loadSQLFile($file));
-            $statment->bind_param($types, ...$params);
+        if ($this->dbLink) {
+            $statment = mysqli_prepare($this->dbLink, $this->loadSQLFile($file));
+            $paramsEscaped = array();
+
+            foreach($params as $param){
+                $paramsEscaped[] = mysqli_real_escape_string($this->dbLink, $param);
+            }
+
+            $statment->bind_param($types, ...$paramsEscaped);
             $success = $statment->execute();
             $statment->close();
             return $success;
@@ -107,20 +113,20 @@ class Database {
     }
 
     /**
-     * Executes Select Prepare Statement 
-     * 
+     * Executes Select Prepare Statement
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the types of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
-    function select(string $file, array $params, string $types = null): array {
+    public function select(string $file, array $params, string $types = null): array {
         if ($types === null) {
             $types = $this->getTypes($params);
         }
-        if ($this->db_link) {
-            $statment = mysqli_prepare($this->db_link, $this->loadSQLFile($file));
-            if (sizeof($params) >= 1) {
+        if ($this->dbLink) {
+            $statment = mysqli_prepare($this->dbLink, $this->loadSQLFile($file));
+            if (!empty($params)) {
                 $statment->bind_param($types, ...$params);
             }
             $statment->execute();
@@ -144,7 +150,7 @@ class Database {
 
     /**
      * Decodes all fields with html_entity_decode
-     * 
+     *
      * @param array $row the row to decode
      * @return array decoded row
      */
@@ -163,51 +169,51 @@ class Database {
 
     /**
      * Executes a update Statement
-     * 
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
     public function update(string $file, array $params, string $types = null): bool {
-        return $this->execute_with_param($file, $params, $types);
+        return $this->executeWithParam($file, $params, $types);
     }
 
     /**
-     * Executes a delete Statement 
-     * 
+     * Executes a delete Statement
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
     public function delete(string $file, array $params, string $types = null): bool {
-        return $this->execute_with_param($file, $params, $types);
+        return $this->executeWithParam($file, $params, $types);
     }
 
     /**
      * Executes a insert Statement
-     * 
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the type of the params e.g. i (integer) s (String)
      * @return array Result of query
      */
     public function insert(string $file, array $params, string $types = null): bool {
-        return $this->execute_with_param($file, $params, $types);
+        return $this->executeWithParam($file, $params, $types);
     }
     
     /**
      * Executes a Statement
-     * 
+     *
      * @param string $file loads File in Path
      * @param array $params parameter for script
      * @param string $types the types of the params e.g. i (integer) s (String)
      * @return bool success
      */
     public function execute(string $file): bool {
-        if ($this->db_link) {
-            $statment = mysqli_prepare($this->db_link, $this->loadSQLFile($file));
+        if ($this->dbLink) {
+            $statment = mysqli_prepare($this->dbLink, $this->loadSQLFile($file));
             $success = $statment->execute();
             $statment->close();
             return $success;
@@ -219,7 +225,7 @@ class Database {
 
     /**
      * Loads a File from the specified Path
-     * 
+     *
      * @param string $file loads File in Path
      * @return string File Contents as a String
      */
@@ -229,7 +235,7 @@ class Database {
 
     /**
      * Analyses Type of Field and appends the right type to the PrepareStatement
-     * 
+     *
      * @param array $fields to get the type from
      * @return string with types
      */
@@ -257,8 +263,8 @@ class Database {
      * Closes the Database Connection
      */
     public function close(): bool {
-        if($this->db_link){
-            return mysqli_close($this->db_link);
+        if($this->dbLink){
+            return mysqli_close($this->dbLink);
         }
         else{
             return false;
