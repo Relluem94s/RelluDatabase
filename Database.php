@@ -96,13 +96,15 @@ class Database {
         }
         if ($this->dbLink) {
             $statment = mysqli_prepare($this->dbLink, $this->loadSQLFile($file));
-            $paramsEscaped = array();
 
-            foreach($params as $param){
-                $paramsEscaped[] = mysqli_real_escape_string($this->dbLink, $param);
+            $statment->bind_param(implode("", $types), ...$params);
+
+            for($i = 0; $i < sizeof($types); $i++){
+                if($types[$i] == "b"){
+                    $statment->send_long_data($i, $params[$i]);
+                }
             }
-
-            $statment->bind_param($types, ...$paramsEscaped);
+            
             $success = $statment->execute();
             $statment->close();
             return $success;
@@ -122,7 +124,7 @@ class Database {
      */
     public function select(string $file, array $params, string $types = null): array {
         if ($types === null) {
-            $types = $this->getTypes($params);
+            $types = implode("", $this->getTypes($params));
         }
         if ($this->dbLink) {
             $statment = mysqli_prepare($this->dbLink, $this->loadSQLFile($file));
@@ -237,22 +239,32 @@ class Database {
      * Analyses Type of Field and appends the right type to the PrepareStatement
      *
      * @param array $fields to get the type from
-     * @return string with types
+     * @return array with types
      */
-    private function getTypes(array $fields): string {
-        $types = "";
+    private function getTypes(array $fields): array {
+        $types = array();
 
         foreach ($fields as $field) {
             switch (gettype($field)) {
-                case "boolean": $types .= "i";
+                case "boolean":
+                    $types[] = "i";
                     break;
-                case "integer": $types .= "i";
+                case "integer":
+                    $types[] = "i";
                     break;
-                case "double": $types .= "d";
+                case "double":
+                    $types[] = "d";
                     break;
-                case "string": $types .= "s";
+                case "string":
+                    if(strlen($field) >= 4096){
+                        $types[] = "b";
+                    }
+                    else{
+                        $types[] = "s";
+                    }
                     break;
-                default: $types .= "s";
+                default:
+                    $types[] = "s";
                     break;
             }
         }
